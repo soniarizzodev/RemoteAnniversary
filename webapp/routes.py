@@ -5,6 +5,7 @@ Routes and views for the flask application.
 from datetime import datetime
 from flask import render_template
 from webapp import app
+from webapp.api.get_book import get_book
 
 @app.route('/')
 @app.route('/home')
@@ -35,3 +36,11 @@ def about():
         year=datetime.now().year,
         message='Your application description page.'
     )
+
+################################################
+## WEB SERVICES
+
+@app.route('/book')
+def book():    
+    """Returns the book content."""
+    return get_book()

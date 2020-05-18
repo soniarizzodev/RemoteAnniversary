@@ -3,23 +3,23 @@
 {% block content %}
 
 <section class="row book-container">
-    <div class="col-12">        
-            <div class="row book">
-                <div class="col-sm-12 col-md-6 book-item">                    
-                        <div class="guest">Sonia</div>
-                        <div class="content">
-                            Quello che avete fatto per noi negli ultimi 40 anni &egrave; meraviglioso. Siete un esempio. Vi voglio tanto bene. Auguri per essere stati insieme una quarantena di anni.
-                            Quello che avete fatto per noi negli ultimi 40 anni &egrave; meraviglioso. Siete un esempio. Vi voglio tanto bene. Auguri per essere stati insieme una quarantena di anni.
-                            Quello che avete fatto per noi negli ultimi 40 anni &egrave; meraviglioso. Siete un esempio. Vi voglio tanto bene. Auguri per essere stati insieme una quarantena di anni.
-                        </div>                  
+    <div class="col-12">
+        <div class="row book">
+            <div class="col-sm-12 col-md-6 book-item">
+                <div class="guest">Sonia</div>
+                <div class="content">
+                    Quello che avete fatto per noi negli ultimi 40 anni &egrave; meraviglioso. Siete un esempio. Vi voglio tanto bene. Auguri per essere stati insieme una quarantena di anni.
+                    Quello che avete fatto per noi negli ultimi 40 anni &egrave; meraviglioso. Siete un esempio. Vi voglio tanto bene. Auguri per essere stati insieme una quarantena di anni.
+                    Quello che avete fatto per noi negli ultimi 40 anni &egrave; meraviglioso. Siete un esempio. Vi voglio tanto bene. Auguri per essere stati insieme una quarantena di anni.
                 </div>
-                <div class="col-sm-12 col-md-6 book-item">                  
-                        <div class="guest">Sonia</div>
-                        <div class="content">
-                            Quello che avete fatto per noi negli ultimi 40 anni &egrave; meraviglioso. Siete un esempio. Vi voglio tanto bene. Auguri per essere stati insieme una quarantena di anni.                            
-                        </div>                   
+            </div>
+            <div class="col-sm-12 col-md-6 book-item">
+                <div class="guest">Sonia</div>
+                <div class="content">
+                    Quello che avete fatto per noi negli ultimi 40 anni &egrave; meraviglioso. Siete un esempio. Vi voglio tanto bene. Auguri per essere stati insieme una quarantena di anni.
                 </div>
-            </div> 
+            </div>
+        </div>
         <div class="row">
             <div class="col-12 add-button">
                 <button class="btn btn-primary">Scrivi</button>
@@ -28,4 +28,13 @@
     </div>
 </section>
 
+{% endblock %}
+{% block scripts %}
+{{super()}}
+<script type="text/javascript" src="/static/scripts/knockout-3.5.1.debug.js"></script>
+<script type="text/javascript" src="/static/scripts/viewmodels.js"></script>
+<script type="text/javascript">
+    window["app"] = new App();
+    ko.applyBindings(app, document.body);
+</script>
 {% endblock %}
