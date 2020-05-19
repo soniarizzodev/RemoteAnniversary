@@ -30,8 +30,24 @@ App.prototype.getBook = function () {
 App.prototype.addEntry = function () {
     let _self = this;
 
-    _self.CurrentEntry(new BookEntryViewModel());
+    _self.CurrentEntry(new BookEntryViewModel({ is_new : true }));
     _self.IsEditMode(true);
+};
+
+App.prototype.showDeleteModal = function () {
+    $('#deleteModal').modal('show');
+};
+
+App.prototype.showEditModal = function () {
+    $('#editModal').modal('show');
+};
+
+App.prototype.showKeyModal = function () {
+    $('#keyModal').modal('show');
+};
+
+App.prototype.hideAllModals = function () {
+    $('.modal').modal('hide');
 };
 
 function BookViewModel(model) {
@@ -74,6 +90,8 @@ function BookEntryViewModel(model) {
     this.Author = ko.observable('');
     this.Message = ko.observable('');
     this.Media = ko.observableArray([]);
+    this.EditKey = ko.observable('');
+    this.IsNew = ko.observable(false);
 
     if (model)
         _self.SetFromModel(model);
@@ -90,6 +108,9 @@ BookEntryViewModel.prototype.SetFromModel = function (model) {
 
     if (model.message)
         _self.Message(model.message);
+
+    if (model.is_new)
+        _self.IsNew(model.is_new);
 };
 
 BookEntryViewModel.prototype.ToModel = function () {
@@ -98,7 +119,8 @@ BookEntryViewModel.prototype.ToModel = function () {
     let model = {
         id: _self.Id(),
         author: _self.Author(),
-        message: _self.Message()
+        message: _self.Message(),
+        edit_key: _self.EditKey()
     };
 
     return model;
@@ -121,7 +143,72 @@ BookEntryViewModel.prototype.updateBookEntry = function () {
                 return response.json();
 
         }).then(function (response) {
+            app.hideAllModals();
+
             if (response.status === false)
                 console.log(response.message);
+            else
+                if (response.data.is_new) {
+                    _self.EditKey(response.data.edit_key);
+                    app.showKeyModal();
+                }                    
         });
+};
+
+BookEntryViewModel.prototype.deleteBookEntry = function () {
+    let _self = this;
+
+    let data = {
+        book_entry_id: _self.Id(),
+        edit_key: _self.EditKey()
+    };
+
+    fetch(host + '/deletebookentry',
+        {
+            method: 'POST',
+            body: JSON.stringify(data)
+        })
+        .then(function (response) {
+            if (response.ok)
+                return response.json();
+
+        }).then(function (response) {
+            if (response.status === false)
+                console.log(response.message);
+            else {
+                app.Book().BookEntries.remove(_self);
+                app.hideAllModals();
+            }
+        });
+};
+
+BookEntryViewModel.prototype.startDeleteProcess = function () {
+    let _self = this;
+
+    app.CurrentEntry(_self);
+
+    app.showDeleteModal();
+};
+
+BookEntryViewModel.prototype.startEditProcess = function () {
+    let _self = this;
+
+    app.CurrentEntry(_self);
+
+    app.IsEditMode(true);
+};
+
+BookEntryViewModel.prototype.checkUpdateBookEntry = function () {
+    let _self = this;
+
+    if (_self.IsNew())
+        _self.updateBookEntry();
+    else
+        app.showEditModal();
+};
+
+BookEntryViewModel.prototype.confirmUpdateBookEntry = function () {
+    let _self = this;
+
+    _self.updateBookEntry();     
 };

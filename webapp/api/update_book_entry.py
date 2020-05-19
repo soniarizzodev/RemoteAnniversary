@@ -25,14 +25,24 @@ def update_book_entry(book_entry):
         else:
             book_data['book_entries'] = []
 
-        is_new = False if 'id' in book_entry and book_entry['id'] else True
+        is_new = False
 
-        if is_new:
+        existing_entry = next((entry for entry in book_data['book_entries'] if entry['id'] == book_entry['id']), None)
+
+        if existing_entry is not None:
+            # Stop execution and return exception if the edit key doesn't match
+            if book_entry['edit_key'] != existing_entry['edit_key']:
+                raise Exception('Edit Key doesn\'t match')
+
+            existing_entry['author'] = book_entry['author']
+            existing_entry['message'] = book_entry['message']
+
+        else:
+            is_new = True
             book_entry['id'] = len(book_data['book_entries']) + 1;
-            book_entry['edit_key'] = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
-            
-
-        book_data['book_entries'].append(book_entry)
+            book_entry['edit_key'] = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))          
+            book_data['book_entries'].append(book_entry)
+           
        
         with open(path, 'w') as f:
             json.dump(book_data, f) 
