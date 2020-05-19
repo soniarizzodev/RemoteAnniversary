@@ -135,3 +135,6 @@ obj/Debug
 *.pyproj
 *.pyproj.user
 *.sln
+
+# Remote Anniversary
+/webapp/static/book_contents
