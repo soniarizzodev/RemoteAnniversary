@@ -5,7 +5,8 @@ var host = location.protocol + '//' + location.hostname + (location.port ? ':' +
 function App() {
     let _self = this;
     this.Book = ko.observable(new BookViewModel());
-
+    this.IsEditMode = ko.observable(false);
+    this.CurrentEntry = ko.observable();
 }
 
 App.prototype.getBook = function () {
@@ -26,18 +27,17 @@ App.prototype.getBook = function () {
         });
 };
 
+App.prototype.addEntry = function () {
+    let _self = this;
+
+    _self.CurrentEntry(new BookEntryViewModel());
+    _self.IsEditMode(true);
+};
+
 function BookViewModel(model) {
     let _self = this;
 
     this.BookEntries = ko.observableArray([]);
-    this.NewEntry = ko.observable('');
-
-    let dummy_entry = {
-        author: 'Sonia',
-        message: 'Love y'
-    };
-
-    _self.NewEntry(new BookEntryViewModel(dummy_entry));
 
     if (model)
         _self.SetFromModel(model);
@@ -70,6 +70,7 @@ BookViewModel.prototype.ToModel = function () {
 function BookEntryViewModel(model) {
     let _self = this;
 
+    this.Id = ko.observable('');
     this.Author = ko.observable('');
     this.Message = ko.observable('');
     this.Media = ko.observableArray([]);
@@ -80,6 +81,9 @@ function BookEntryViewModel(model) {
 
 BookEntryViewModel.prototype.SetFromModel = function (model) {
     let _self = this;
+
+    if (model.id)
+        _self.Id(model.id);
 
     if (model.author)
         _self.Author(model.author);
@@ -92,6 +96,7 @@ BookEntryViewModel.prototype.ToModel = function () {
     let _self = this;
 
     let model = {
+        id: _self.Id(),
         author: _self.Author(),
         message: _self.Message()
     };
@@ -99,14 +104,14 @@ BookEntryViewModel.prototype.ToModel = function () {
     return model;
 };
 
-BookEntryViewModel.prototype.addToBook = function () {
+BookEntryViewModel.prototype.updateBookEntry = function () {
     let _self = this;
 
     let data = {
         book_entry: _self.ToModel()
     };
 
-    fetch(host + '/addbookentry',
+    fetch(host + '/updatebookentry',
         {
             method: 'POST',
             body: JSON.stringify(data)

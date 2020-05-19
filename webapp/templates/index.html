@@ -2,29 +2,40 @@
 
 {% block content %}
 
-<section class="row book-container">
+<section class="row book-container" data-bind="with:Book, visible:!IsEditMode()">
     <div class="col-12">
-        <div class="row book">
+        <div class="row book" data-bind="foreach:BookEntries">
             <div class="col-sm-12 col-md-6 book-item">
-                <div class="guest">Sonia</div>
-                <div class="content">
-                    Quello che avete fatto per noi negli ultimi 40 anni &egrave; meraviglioso. Siete un esempio. Vi voglio tanto bene. Auguri per essere stati insieme una quarantena di anni.
-                    Quello che avete fatto per noi negli ultimi 40 anni &egrave; meraviglioso. Siete un esempio. Vi voglio tanto bene. Auguri per essere stati insieme una quarantena di anni.
-                    Quello che avete fatto per noi negli ultimi 40 anni &egrave; meraviglioso. Siete un esempio. Vi voglio tanto bene. Auguri per essere stati insieme una quarantena di anni.
-                </div>
-            </div>
-            <div class="col-sm-12 col-md-6 book-item">
-                <div class="guest">Sonia</div>
-                <div class="content">
-                    Quello che avete fatto per noi negli ultimi 40 anni &egrave; meraviglioso. Siete un esempio. Vi voglio tanto bene. Auguri per essere stati insieme una quarantena di anni.
-                </div>
-            </div>
+                <div class="guest" data-bind="text:Author"></div>
+                <div class="content" data-bind="text:Message"></div>
+            </div>            
         </div>
         <div class="row">
             <div class="col-12 add-button">
-                <button class="btn btn-primary">Scrivi</button>
+                <button class="btn btn-primary" data-bind="click:$root.addEntry.bind($root)">Scrivi</button>
             </div>
         </div>
+    </div>
+</section>
+
+<section class="row" data-bind="visible:IsEditMode">
+    <div class="col-12 edit-container">        
+        <form data-bind="with:CurrentEntry">
+            <div class="edit">
+                <div class="form-group">
+                    <label for="author">Autore</label>
+                    <input type="text" class="form-control" id="author" aria-describedby="author" data-bind="value:Author">
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Messaggio</label>
+                    <textarea class="form-control" id="message" rows="6"  data-bind="value:Message"></textarea>
+                </div>
+            </div>
+            <div class="add-button">
+                <button class="btn btn-primary" data-bind="click:updateBookEntry">Salva</button>
+            </div>           
+        </form>              
     </div>
 </section>
 
@@ -36,5 +47,6 @@
 <script type="text/javascript">
     window["app"] = new App();
     ko.applyBindings(app, document.body);
+    app.getBook();
 </script>
 {% endblock %}

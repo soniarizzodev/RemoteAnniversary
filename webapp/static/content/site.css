@@ -3,6 +3,7 @@
     --footer-height:30px;
     --button-height:70px;
     --book-container-padding:2rem;
+    --edit-container-padding:2rem;
 }
 
 html{
@@ -79,6 +80,22 @@ header h4{
     padding:12px;
     text-align:center;
     height:var(--button-height);
+}
+
+.edit-container{
+    display:flex;
+    flex-direction:column;
+    justify-content:space-evenly;
+    align-items:center;
+    padding-top:var(--edit-container-padding);
+}
+
+.edit{
+    width:700px;
+    max-width:100%;
+    height:calc(100vh - var(--header-height) - var(--footer-height) - var(--button-height) - var(--edit-container-padding));
+    background-color:white;
+    padding:12px;    
 }
 
 .btn{

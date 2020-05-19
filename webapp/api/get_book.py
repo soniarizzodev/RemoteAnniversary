@@ -5,7 +5,8 @@ from webapp.api.Response import Response
 
 def get_book():
 
-    response = Response(True)
+    response = Response(True, 'Book retrieved successfully')
+
     path = 'webapp/static/book_contents/book.json'
 
     try:
@@ -16,7 +17,11 @@ def get_book():
                 book_data = json.load(json_file)
 
         if book_data is not None:
+            for entry in book_data['book_entries']:
+                del entry['edit_key']
+
             response.add('book', book_data)
+
         else:
             response.status = False
             response.message = 'No book found'
