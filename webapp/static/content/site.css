@@ -7,12 +7,11 @@
 }
 
 html{
-    height:100vh;
-    overflow:hidden;
+    min-height:100vh;
 }
 
 body{
-    height:100vh;
+    min-height:100vh;
     display:flex;
     flex-direction:column;
     justify-content:space-between;
@@ -92,11 +91,11 @@ header h4{
 
 .edit{
     width:700px;
-    max-width:100%;
-    height:calc(100vh - var(--header-height) - var(--footer-height) - var(--button-height) - var(--edit-container-padding));
+    max-width:calc(100vw - 30px);
     background-color:white;
     padding-top:15px;
-    padding-bottom:15px;    
+    padding-bottom:15px;
+    margin:0;
 }
 
 .key{
@@ -127,6 +126,14 @@ header h4{
     position:absolute;
     right:12px;
     top:5px;
+}
+
+.media{
+    max-width:100%;
+}
+
+.custom-file-label{
+    overflow:hidden;
 }
 
 .btn{

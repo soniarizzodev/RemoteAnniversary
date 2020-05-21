@@ -54,10 +54,11 @@ def book():
 @app.route('/updatebookentry', methods=['GET', 'POST'])
 def updatebookentry():    
     """Adds or updates a book entry"""
-    data = request.get_json(force=True)
+    media = request.files
+    book_entry = request.form.get('book_entry')
 
-    if (data is not None) and ('book_entry' in data):
-        return update_book_entry(data['book_entry'])
+    if book_entry is not None:
+        return update_book_entry(book_entry, media)
     else:
         response = Response(False, ERROR_MISSING_PARAMS)
         return response.compose()

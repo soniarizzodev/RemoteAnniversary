@@ -5,7 +5,7 @@ import string
 
 from webapp.api.Response import Response
 
-def update_book_entry(book_entry):
+def update_book_entry(new_entry, media):
 
     response = Response(True, 'Entry added successfully')
 
@@ -13,6 +13,7 @@ def update_book_entry(book_entry):
     path = f'{folder_path}/book.json'
 
     try:
+        book_entry = json.loads(new_entry)
         book_data = {}
 
         if not os.path.exists(folder_path):
@@ -40,7 +41,20 @@ def update_book_entry(book_entry):
         else:
             is_new = True
             book_entry['id'] = len(book_data['book_entries']) + 1;
-            book_entry['edit_key'] = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))          
+            book_entry['edit_key'] = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))   
+            
+            if media is not None and 'video' in media:
+                saved_video_path = save_media(media['video'], book_entry['id'])
+                
+                if saved_video_path is not None:
+                    book_entry['video_path'] = saved_video_path
+
+            if media is not None and 'image' in media:
+                saved_image_path = save_media(media['image'], book_entry['id'])
+                
+                if saved_image_path is not None:
+                    book_entry['image_path'] = saved_image_path
+
             book_data['book_entries'].append(book_entry)
            
        
@@ -58,4 +72,18 @@ def update_book_entry(book_entry):
 
     return response.compose()
 
+def save_media(media, id):
 
+    try:
+        folder_path = 'webapp/static/book_contents'
+
+        extension = media.filename.split('.')[-1]
+
+        new_name = f'{str(id)}.{extension}'
+
+        media.save(f'{folder_path}/{new_name}')
+
+        return new_name
+
+    except Exception as e:
+        return None

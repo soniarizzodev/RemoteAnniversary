@@ -32,6 +32,7 @@ App.prototype.addEntry = function () {
 
     _self.CurrentEntry(new BookEntryViewModel({ is_new : true }));
     _self.IsEditMode(true);
+    bsCustomFileInput.init('.custom-file-input');
 };
 
 App.prototype.showDeleteModal = function () {
@@ -89,7 +90,10 @@ function BookEntryViewModel(model) {
     this.Id = ko.observable('');
     this.Author = ko.observable('');
     this.Message = ko.observable('');
-    this.Media = ko.observableArray([]);
+    this.SavedVideo = ko.observable();
+    this.SavedImage = ko.observable();
+    this.NewVideo = ko.observable();
+    this.NewImage = ko.observable();
     this.EditKey = ko.observable('');
     this.IsNew = ko.observable(false);
 
@@ -108,6 +112,12 @@ BookEntryViewModel.prototype.SetFromModel = function (model) {
 
     if (model.message)
         _self.Message(model.message);
+
+    if (model.video_path)
+        _self.SavedVideo(model.video_path);
+
+    if (model.image_path)
+        _self.SavedImage(model.image_path);
 
     if (model.is_new)
         _self.IsNew(model.is_new);
@@ -129,14 +139,15 @@ BookEntryViewModel.prototype.ToModel = function () {
 BookEntryViewModel.prototype.updateBookEntry = function () {
     let _self = this;
 
-    let data = {
-        book_entry: _self.ToModel()
-    };
+    let form = new FormData();
+    form.append("video", _self.NewVideo());
+    form.append("image", _self.NewImage());
+    form.append("book_entry", JSON.stringify(_self.ToModel()));    
 
     fetch(host + '/updatebookentry',
         {
             method: 'POST',
-            body: JSON.stringify(data)
+            body: form
         })
         .then(function (response) {
             if (response.ok)
@@ -196,6 +207,8 @@ BookEntryViewModel.prototype.startEditProcess = function () {
     app.CurrentEntry(_self);
 
     app.IsEditMode(true);
+
+    bsCustomFileInput.init('.custom-file-input');
 };
 
 BookEntryViewModel.prototype.checkUpdateBookEntry = function () {
