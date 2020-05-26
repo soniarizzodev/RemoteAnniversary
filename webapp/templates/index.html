@@ -2,25 +2,35 @@
 
 {% block content %}
 
-<section class="row book-container" data-bind="with:Book, visible:!IsEditMode()">
-    <div class="col-12">
-        <div class="row book" data-bind="foreach:BookEntries">
-            <div class="col-sm-12 col-md-6 book-item">
+<section class="row">
+    <div class="col-12 add-button">
+        <button class="btn btn-primary" data-bind="click:$root.addEntry.bind($root)">Scrivi</button>
+    </div>
+</section>
+
+<section class="row" data-bind="with:Book, visible:!IsEditMode()">
+    <div class="col-12 entries-container" data-bind="foreach:BookEntries">
+        <div class="book-entry">           
+            <div class="guest">
+                <span data-bind="text:Author"></span>
                 <button class="btn icon-button edit-button" data-bind="click:startEditProcess"><i class="icofont-ui-edit"></i></button>
-                <div class="guest" data-bind="text:Author"></div>
-                <div class="content" data-bind="text:Message"></div>
-                <video class="media" controls>
-                    <source data-bind="attr:{src:'/static/book_contents/' + SavedVideo()}">
-                    Your browser does not support the video tag.
-                </video>
-                <img class="media" data-bind="attr:{src:'/static/book_contents/' + SavedImage()}" />
+
             </div>
-        </div>
-        <div class="row">
-            <div class="col-12 add-button">
-                <button class="btn btn-primary" data-bind="click:$root.addEntry.bind($root)">Scrivi</button>
+            <div class="content">
+                <div class="message" data-bind="text:Message"></div>
+                <div class="media" data-bind="with:SavedVideo, visible:SavedVideo">
+                    <video controls>
+                        <source data-bind="attr:{src:'/static/book_contents/' + $data}">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <div class="media" data-bind="with:SavedImage, visible:SavedVideo">
+                    <img data-bind="attr:{src:'/static/book_contents/' + $data}" />
+                </div>
             </div>
+                     
         </div>
+        
     </div>
 </section>
 
