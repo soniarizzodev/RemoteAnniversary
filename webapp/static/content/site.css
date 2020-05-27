@@ -51,16 +51,17 @@ header h4{
 
 .entries-container{
     display:flex;
-    flex-direction:column;
-    align-items:center;
+    flex-direction:row;
+    flex-wrap:wrap;
+    justify-content:center;
 }
 
 .book-entry{
     position:relative;
     width:100%;
-    max-width:700px;
+    max-width:500px;
     background-color:white;
-    margin:var(--general-margin) 0;
+    margin:var(--general-margin);
     border-radius:5px;
 }
 
@@ -94,12 +95,13 @@ header h4{
 }
 
 .edit{
-    width:700px;
-    max-width:calc(100vw - 30px);
+    width:100%;
+    max-width:700px;
     background-color:white;
     padding-top:var(--general-padding);
     padding-bottom:var(--general-padding);
     margin:0;
+    border-radius:5px;
 }
 
 .key{
@@ -132,6 +134,25 @@ header h4{
     top:calc(var(--general-padding) - (var(--general-padding) / 2));
 }
 
+.delete-button{
+    background-color:#f3efef;
+    color:#ff2121;
+    border:1px solid #e1e1e1;
+}
+
+.delete-button:hover {
+   color:#ff4646;
+}
+
+.delete-button:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active, .show>.btn-primary.dropdown-toggle {
+    color:#ff4646;
+}
+
+.delete-button.focus, .delete-button:focus {
+    color:#ff4646;
+    box-shadow: 0 0 0 0.2rem rgba(255, 125, 152, 0.5);
+}
+
 .media{
     padding:var(--general-padding) 0;
 }
@@ -140,8 +161,25 @@ header h4{
     max-width:100%;
 }
 
+.custom-file{
+    margin-top: var(--general-margin);
+}
 .custom-file-label{
     overflow:hidden;
+}
+
+.no-padding{
+    padding:0;
+}
+
+h5{
+    margin:0;
+    padding-top:var(--general-padding);
+    font-weight:bold;
+}
+
+.form-group label{
+    font-weight:bold;
 }
 
 .btn{

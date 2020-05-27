@@ -38,6 +38,18 @@ def update_book_entry(new_entry, media):
             existing_entry['author'] = book_entry['author']
             existing_entry['message'] = book_entry['message']
 
+            if media is not None and 'video' in media:
+                saved_video_path = save_media(media['video'], existing_entry['id'])
+                
+                if saved_video_path is not None:
+                    existing_entry['video_path'] = saved_video_path
+
+            if media is not None and 'image' in media:
+                saved_image_path = save_media(media['image'], existing_entry['id'])
+                
+                if saved_image_path is not None:
+                    existing_entry['image_path'] = saved_image_path
+
         else:
             is_new = True
             book_entry['id'] = len(book_data['book_entries']) + 1;
@@ -62,6 +74,7 @@ def update_book_entry(new_entry, media):
             json.dump(book_data, f) 
             
         if is_new:           
+            response.add('id', book_entry['id'])
             response.add('edit_key', book_entry['edit_key'])
 
         response.add('is_new', is_new)

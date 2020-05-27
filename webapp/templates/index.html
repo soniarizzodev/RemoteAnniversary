@@ -9,12 +9,11 @@
 </section>
 
 <section class="row" data-bind="with:Book, visible:!IsEditMode()">
-    <div class="col-12 entries-container" data-bind="foreach:BookEntries">
+    <div class="col-12 entries-container" data-bind="foreach:BookEntries.slice(0).reverse()">
         <div class="book-entry">           
             <div class="guest">
                 <span data-bind="text:Author"></span>
                 <button class="btn icon-button edit-button" data-bind="click:startEditProcess"><i class="icofont-ui-edit"></i></button>
-
             </div>
             <div class="content">
                 <div class="message" data-bind="text:Message"></div>
@@ -24,7 +23,7 @@
                         Your browser does not support the video tag.
                     </video>
                 </div>
-                <div class="media" data-bind="with:SavedImage, visible:SavedVideo">
+                <div class="media" data-bind="with:SavedImage, visible:SavedImage">
                     <img data-bind="attr:{src:'/static/book_contents/' + $data}" />
                 </div>
             </div>
@@ -48,11 +47,35 @@
                         <label for="message">Messaggio</label>
                         <textarea class="form-control" id="message" rows="10" data-bind="value:Message"></textarea>
                     </div>
-                    <div class="custom-file">
+
+                    <h5>Contenuti multimediali</h5>
+                    <div class="media row" data-bind="with:SavedVideo, visible:SavedVideo">
+                        <div class="col-10">
+                            <video controls>
+                                <source data-bind="attr:{src:'/static/book_contents/' + $data}">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                        <div class="col-2 no-padding">
+                            <button class="btn icon-button delete-button"><i class="icofont-ui-delete"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="custom-file" data-bind="visible:SavedVideo() == null">
                         <input type="file" class="custom-file-input" id="videoUpload" lang="it" accept="video/*" capture="capture" data-bind="event:{ change: function() { NewVideo($element.files[0]) } }">
                         <label class="custom-file-label" for="videoUpload" data-browse="Scelgi">Carica video</label>
                     </div>
-                    <div class="custom-file">
+
+                    <div class="media row" data-bind="with:SavedImage, visible:SavedImage">
+                        <div class="col-10">
+                            <img data-bind="attr:{src:'/static/book_contents/' + $data}" />
+                        </div>
+                        <div class="col-2 no-padding">
+                            <button class="btn icon-button delete-button"><i class="icofont-ui-delete"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="custom-file"  data-bind="visible:SavedImage() == null">
                         <input type="file" class="custom-file-input" id="imageUpload" lang="it" accept="image/*" capture="capture" data-bind="event:{ change: function() { NewImage($element.files[0]) } }">
                         <label class="custom-file-label" for="imageUpload" data-browse="Scelgi">Carica foto</label>
                     </div>
@@ -149,7 +172,7 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" data-bind="click:$root.navToHome">Chiudi</button>
             </div>
         </div>
     </div>

@@ -33,6 +33,23 @@ App.prototype.addEntry = function () {
     _self.CurrentEntry(new BookEntryViewModel({ is_new : true }));
     _self.IsEditMode(true);
     bsCustomFileInput.init('.custom-file-input');
+    history.pushState({ page: 'addEntry' }, '', 'addEntry');
+};
+
+App.prototype.getEntryById = function (entry_id) {
+    let _self = this;
+
+    let entry = _self.Book().BookEntries().filter(entry => entry.Id().toString() === entry_id.toString());
+
+    if (entry)
+        return entry[0];
+    else
+        return new BookEntryViewModel();
+};
+
+App.prototype.navToHome = function () {
+    window.location.href = host;
+    return true;
 };
 
 App.prototype.showDeleteModal = function () {
@@ -161,8 +178,12 @@ BookEntryViewModel.prototype.updateBookEntry = function () {
             else
                 if (response.data.is_new) {
                     _self.EditKey(response.data.edit_key);
+                    _self.Id(response.data.id);
                     app.showKeyModal();
-                }                    
+                    app.Book().BookEntries.push(_self);
+                }
+                else
+                    app.navToHome();
         });
 };
 
@@ -188,7 +209,7 @@ BookEntryViewModel.prototype.deleteBookEntry = function () {
                 console.log(response.message);
             else {
                 app.Book().BookEntries.remove(_self);
-                app.hideAllModals();
+                app.navToHome();
             }
         });
 };
@@ -209,6 +230,10 @@ BookEntryViewModel.prototype.startEditProcess = function () {
     app.IsEditMode(true);
 
     bsCustomFileInput.init('.custom-file-input');
+
+    let url = 'editEntry?id=' + app.CurrentEntry().Id();
+
+    history.pushState({ page: 'editEntry' }, '', url);
 };
 
 BookEntryViewModel.prototype.checkUpdateBookEntry = function () {
