@@ -37,6 +37,8 @@ def update_book_entry(new_entry, media):
 
             existing_entry['author'] = book_entry['author']
             existing_entry['message'] = book_entry['message']
+            existing_entry['video_path'] = book_entry['video_path']
+            existing_entry['image_path'] = book_entry['image_path']
 
             if media is not None and 'video' in media:
                 saved_video_path = save_media(media['video'], existing_entry['id'])
@@ -52,7 +54,7 @@ def update_book_entry(new_entry, media):
 
         else:
             is_new = True
-            book_entry['id'] = len(book_data['book_entries']) + 1;
+            book_entry['id'] = assign_id(book_data['book_entries']);
             book_entry['edit_key'] = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))   
             
             if media is not None and 'video' in media:
@@ -100,3 +102,11 @@ def save_media(media, id):
 
     except Exception as e:
         return None
+
+def assign_id(book_entries):
+    new_id = 1
+    if len(book_entries) > 0:
+        last_id = book_entries[-1]['id']
+        new_id = last_id + 1
+
+    return new_id

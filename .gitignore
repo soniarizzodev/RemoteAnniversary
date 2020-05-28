@@ -138,3 +138,4 @@ obj/Debug
 
 # Remote Anniversary
 /webapp/static/book_contents
+/webapp/database.db

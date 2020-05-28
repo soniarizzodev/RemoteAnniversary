@@ -147,18 +147,37 @@ BookEntryViewModel.prototype.ToModel = function () {
         id: _self.Id(),
         author: _self.Author(),
         message: _self.Message(),
-        edit_key: _self.EditKey()
+        edit_key: _self.EditKey(),
+        video_path: _self.SavedVideo() ? _self.SavedVideo() : '',
+        image_path: _self.SavedImage() ? _self.SavedImage() : ''
     };
 
     return model;
+};
+
+BookEntryViewModel.prototype.DeleteVideo = function () {
+    let _self = this;
+
+    _self.SavedVideo(null);
+};
+
+BookEntryViewModel.prototype.DeleteImage = function () {
+    let _self = this;
+
+    _self.SavedImage(null);
 };
 
 BookEntryViewModel.prototype.updateBookEntry = function () {
     let _self = this;
 
     let form = new FormData();
-    form.append("video", _self.NewVideo());
-    form.append("image", _self.NewImage());
+
+    if(_self.NewVideo())
+        form.append("video", _self.NewVideo());
+
+    if (_self.NewImage())
+        form.append("image", _self.NewImage());
+
     form.append("book_entry", JSON.stringify(_self.ToModel()));    
 
     fetch(host + '/updatebookentry',

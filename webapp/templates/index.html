@@ -2,36 +2,38 @@
 
 {% block content %}
 
-<section class="row">
-    <div class="col-12 add-button">
-        <button class="btn btn-primary" data-bind="click:$root.addEntry.bind($root)">Scrivi</button>
-    </div>
+<section data-bind="with:Book, visible:!IsEditMode()">
+    <section class="row">
+        <div class="col-12 add-button">
+            <button class="btn btn-primary" data-bind="click:$root.addEntry.bind($root)">Scrivi</button>
+        </div>
+    </section>
+    <section class="row">
+        <div class="col-12 entries-container" data-bind="foreach:BookEntries.slice(0).reverse()">
+            <div class="book-entry">
+                <div class="guest">
+                    <span data-bind="text:Author"></span>
+                    <button class="btn icon-button edit-button" data-bind="click:startEditProcess"><i class="icofont-ui-edit"></i></button>
+                </div>
+                <div class="content">
+                    <div class="message" data-bind="text:Message"></div>
+                    <div class="media" data-bind="with:SavedVideo, visible:SavedVideo">
+                        <video controls>
+                            <source data-bind="attr:{src:'/static/book_contents/' + $data}">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    <div class="media" data-bind="with:SavedImage, visible:SavedImage">
+                        <img data-bind="attr:{src:'/static/book_contents/' + $data}" />
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
 </section>
 
-<section class="row" data-bind="with:Book, visible:!IsEditMode()">
-    <div class="col-12 entries-container" data-bind="foreach:BookEntries.slice(0).reverse()">
-        <div class="book-entry">           
-            <div class="guest">
-                <span data-bind="text:Author"></span>
-                <button class="btn icon-button edit-button" data-bind="click:startEditProcess"><i class="icofont-ui-edit"></i></button>
-            </div>
-            <div class="content">
-                <div class="message" data-bind="text:Message"></div>
-                <div class="media" data-bind="with:SavedVideo, visible:SavedVideo">
-                    <video controls>
-                        <source data-bind="attr:{src:'/static/book_contents/' + $data}">
-                        Your browser does not support the video tag.
-                    </video>
-                </div>
-                <div class="media" data-bind="with:SavedImage, visible:SavedImage">
-                    <img data-bind="attr:{src:'/static/book_contents/' + $data}" />
-                </div>
-            </div>
-                     
-        </div>
-        
-    </div>
-</section>
 
 <section class="row" data-bind="visible:IsEditMode">
     <div class="col-12 edit-container">
@@ -57,7 +59,7 @@
                             </video>
                         </div>
                         <div class="col-2 no-padding">
-                            <button class="btn icon-button delete-button"><i class="icofont-ui-delete"></i></button>
+                            <button class="btn icon-button delete-button" data-bind="click:$parent.DeleteVideo.bind($parent)"><i class="icofont-ui-delete"></i></button>
                         </div>
                     </div>
 
@@ -71,7 +73,7 @@
                             <img data-bind="attr:{src:'/static/book_contents/' + $data}" />
                         </div>
                         <div class="col-2 no-padding">
-                            <button class="btn icon-button delete-button"><i class="icofont-ui-delete"></i></button>
+                            <button class="btn icon-button delete-button" data-bind="click:$parent.DeleteImage.bind($parent)"><i class="icofont-ui-delete"></i></button>
                         </div>
                     </div>
 
