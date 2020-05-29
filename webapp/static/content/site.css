@@ -49,6 +49,22 @@ header h4{
     line-height:1rem;
 }
 
+.login-container{
+    display:flex;
+    flex-direction:row;
+    justify-content:center;
+    padding-top:var(--general-padding);
+}
+
+.login-box{
+    width:100%;
+    max-width:500px;
+    background-color:white;
+    padding:var(--general-padding);
+    border-radius:5px;
+
+}
+
 .entries-container{
     display:flex;
     flex-direction:row;

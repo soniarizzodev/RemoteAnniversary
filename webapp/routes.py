@@ -3,8 +3,13 @@ Routes and views for the flask application.
 """
 
 from datetime import datetime
-from flask import render_template, request
+from flask import render_template, request, redirect, url_for
+from flask_login import current_user, login_user, logout_user, login_required
+
 from webapp import app
+
+from webapp.User import User
+from webapp.UsersManager import UsersManager
 
 from webapp.api.get_book import get_book
 from webapp.api.update_book_entry import update_book_entry
@@ -12,15 +17,32 @@ from webapp.api.delete_book_entry import delete_book_entry
 
 from webapp.const import ERROR_MISSING_PARAMS
 
+
+@app.route('/login_page', methods=['GET', 'POST'])
+def login_page():
+    """Login Page"""
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+
+    return render_template(
+        'login.html',
+        title='Accedi',
+        year=datetime.now().year,
+    )
+
 @app.route('/')
 @app.route('/home')
 def home():
     """Renders the home page."""
-    return render_template(
-        'index.html',
-        title='Home Page',
-        year=datetime.now().year,
-    )
+
+    if current_user.is_authenticated:
+        return render_template(
+            'index.html',
+            title='Home Page',
+            year=datetime.now().year,
+        )
+    else:
+        return redirect(url_for('login_page'))
 
 @app.route('/contact')
 def contact():
@@ -45,13 +67,32 @@ def about():
 ################################################
 ## WEB SERVICES
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+
+    data = request.form
+
+    user = User(data['username'], data['password'])
+    users_manager = UsersManager(user)
+
+    if users_manager.check():
+        login_user(user, True)
+        return redirect(url_for('home'))
+    else:
+        return redirect(url_for('login_page', failed = True))
+
+
 @app.route('/book')
+@login_required
 def book():    
     """Returns the book content."""
     return get_book()
 
 
 @app.route('/updatebookentry', methods=['GET', 'POST'])
+@login_required
 def updatebookentry():    
     """Adds or updates a book entry"""
     media = request.files
@@ -65,6 +106,7 @@ def updatebookentry():
 
 
 @app.route('/deletebookentry', methods=['GET', 'POST'])
+@login_required
 def deletebookentry():    
     """Deletes a book entry"""
     data = request.get_json(force=True)
