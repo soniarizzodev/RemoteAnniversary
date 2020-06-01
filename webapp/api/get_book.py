@@ -3,7 +3,7 @@ import os
 
 from webapp.api.Response import Response
 
-def get_book():
+def get_book(user):
 
     response = Response(True, 'Book retrieved successfully')
 
@@ -18,6 +18,11 @@ def get_book():
 
         if book_data is not None:
             for entry in book_data['book_entries']:
+                # Hide flagged entries for users with limited visibility
+                if 'hide' in entry and user.role == 3:
+                    book_data['book_entries'].remove(entry)
+                    continue
+
                 del entry['edit_key']
 
             response.add('book', book_data)

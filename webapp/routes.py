@@ -73,7 +73,7 @@ def login():
         return redirect(url_for('home'))
 
     data = request.form
-
+    
     user = User(data['username'], data['password'])
     users_manager = UsersManager(user)
 
@@ -88,7 +88,7 @@ def login():
 @login_required
 def book():    
     """Returns the book content."""
-    return get_book()
+    return get_book(current_user)
 
 
 @app.route('/updatebookentry', methods=['GET', 'POST'])

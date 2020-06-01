@@ -1,7 +1,5 @@
 import json
 import os
-import random
-import string
 
 from webapp.api.Response import Response
 

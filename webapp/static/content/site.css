@@ -198,6 +198,16 @@ h5{
     font-weight:bold;
 }
 
+.form-check{
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+}
+
+.form-check-input{
+    margin-top:0;
+}
+
 .btn{
     padding:5px 50px;
     font-size:1.2rem;

@@ -6,7 +6,8 @@ class User():
         password    User Password
         role        User role, define access privileges.
                     1- Admin privileges
-                    2- Viewing privileges
+                    2- Full Viewing privileges
+                    3- Limited Viewing privileges
 
     """
 
