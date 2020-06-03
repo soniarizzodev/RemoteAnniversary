@@ -1,7 +1,13 @@
 {% extends "layout.html" %}
 
 {% block content %}
-
+<!-- Spinner -->
+<div class="spinner" role="status" data-bind="visible:Processing">
+    <div class="spinner-border text-info" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+    <div class="spinner-caption">Operazione in corso</div>
+</div>
 <section data-bind="with:Book, visible:!IsEditMode()">
     <section class="row">
         <div class="col-12 add-button">

@@ -98,6 +98,7 @@ header h4{
     flex-direction:row;
     flex-wrap:wrap;
     justify-content:space-evenly;
+    align-items:flex-start;
 }
 
 .book-entry{
@@ -203,6 +204,8 @@ header h4{
 
 .media img, .media video{
     max-width:100%;
+    max-height:500px;
+    margin:0 auto;
 }
 
 .custom-file{
