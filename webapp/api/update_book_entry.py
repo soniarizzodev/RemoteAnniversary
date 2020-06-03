@@ -7,7 +7,7 @@ from webapp.api.Response import Response
 
 def update_book_entry(new_entry, media):
 
-    response = Response(True, 'Entry added successfully')
+    response = Response(True, 'Tutto a posto! Clicca su Chiudi per tornare ai messaggi.')
 
     folder_path = 'webapp/static/book_contents'
     path = f'{folder_path}/book.json'
@@ -33,7 +33,7 @@ def update_book_entry(new_entry, media):
         if existing_entry is not None:
             # Stop execution and return exception if the edit key doesn't match
             if book_entry['edit_key'] != existing_entry['edit_key']:
-                raise Exception('Edit Key doesn\'t match')
+                raise Exception('Il codice di modifica non corrisponde')
 
             existing_entry['author'] = book_entry['author']
             existing_entry['message'] = book_entry['message']

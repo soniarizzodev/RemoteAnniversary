@@ -21,6 +21,13 @@
         <h4>40 anni insieme</h4>
     </header>
     <div class="container body-content">
+        <!-- Spinner -->
+        <div class="spinner" role="status" data-bind="visible:Processing">
+            <div class="spinner-border text-info" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+            <div class="spinner-caption">Operazione in corso</div>
+        </div>
 
         {% block content %}{% endblock %}
 

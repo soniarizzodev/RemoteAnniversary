@@ -6,16 +6,20 @@ function App() {
     let _self = this;
     this.Book = ko.observable(new BookViewModel());
     this.IsEditMode = ko.observable(false);
+    this.Processing = ko.observable(false);
     this.CurrentEntry = ko.observable();
+    this.Outcome = ko.observable(new OutcomeViewModel());
 }
 
 App.prototype.getBook = function () {
     let _self = this;
-
+    _self.Processing(true);
     fetch(host + '/book')
         .then(function (response) {
             if (response.ok)
                 return response.json();
+            else
+                app.Processing(false);
 
         }).then(function (response) {
             if (response.status === false)
@@ -24,6 +28,7 @@ App.prototype.getBook = function () {
                 const book = response.data.book;
                 _self.Book(new BookViewModel(book));
             }
+            _self.Processing(false);
         });
 };
 
@@ -62,6 +67,11 @@ App.prototype.showEditModal = function () {
 
 App.prototype.showKeyModal = function () {
     $('#keyModal').modal('show');
+};
+
+App.prototype.showOutcomeModal = function () {
+    app.hideAllModals();
+    $('#outcomeModal').modal('show');
 };
 
 App.prototype.hideAllModals = function () {
@@ -170,6 +180,9 @@ BookEntryViewModel.prototype.DeleteImage = function () {
 BookEntryViewModel.prototype.updateBookEntry = function () {
     let _self = this;
 
+    app.hideAllModals();
+    app.Processing(true);
+
     let form = new FormData();
 
     if(_self.NewVideo())
@@ -188,12 +201,23 @@ BookEntryViewModel.prototype.updateBookEntry = function () {
         .then(function (response) {
             if (response.ok)
                 return response.json();
+            else {
+                app.Processing(false);
+                app.Outcome().Message("Qualcosa non ha funzionato :(");
+                app.Outcome().Action(app.hideAllModals);
+                app.showOutcomeModal();
+            }
 
         }).then(function (response) {
-            app.hideAllModals();
 
-            if (response.status === false)
+            app.Processing(false);
+
+            if (response.status === false) {
                 console.log(response.message);
+                app.Outcome().Message(response.message);
+                app.Outcome().Action(app.hideAllModals);
+                app.showOutcomeModal();
+            }
             else
                 if (response.data.is_new) {
                     _self.EditKey(response.data.edit_key);
@@ -201,13 +225,19 @@ BookEntryViewModel.prototype.updateBookEntry = function () {
                     app.showKeyModal();
                     app.Book().BookEntries.push(_self);
                 }
-                else
-                    app.navToHome();
+                else {
+                    app.Outcome().Message(response.message);
+                    app.Outcome().Action(app.navToHome);
+                    app.showOutcomeModal();
+                }
         });
 };
 
 BookEntryViewModel.prototype.deleteBookEntry = function () {
     let _self = this;
+
+    app.hideAllModals();
+    app.Processing(true);
 
     let data = {
         book_entry_id: _self.Id(),
@@ -222,13 +252,28 @@ BookEntryViewModel.prototype.deleteBookEntry = function () {
         .then(function (response) {
             if (response.ok)
                 return response.json();
+            else {
+                app.Processing(false);
+                app.Outcome().Message("Qualcosa non ha funzionato :(");
+                app.Outcome().Action(app.hideAllModals);
+                app.showOutcomeModal();
+            }
 
         }).then(function (response) {
-            if (response.status === false)
+            app.Processing(false);
+
+            if (response.status === false) {
                 console.log(response.message);
+                app.Outcome().Message(response.message);
+                app.Outcome().Action(app.hideAllModals);
+                app.showOutcomeModal();
+            }
+                
             else {
                 app.Book().BookEntries.remove(_self);
-                app.navToHome();
+                app.Outcome().Message(response.message);
+                app.Outcome().Action(app.navToHome);
+                app.showOutcomeModal();
             }
         });
 };
@@ -268,4 +313,24 @@ BookEntryViewModel.prototype.confirmUpdateBookEntry = function () {
     let _self = this;
 
     _self.updateBookEntry();     
+};
+
+function OutcomeViewModel(model) {
+    let _self = this;
+
+    this.Message = ko.observable();
+    this.Action = ko.observable();
+
+    if (model)
+        _self.SetFromModel(model);
+}
+
+OutcomeViewModel.prototype.SetFromModel = function (model) {
+    let _self = this;
+
+    if (model.message) 
+        _self.Message(model.message);
+
+    if (model.action)
+        _self.Action(model.action);
 };

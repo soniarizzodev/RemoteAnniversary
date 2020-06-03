@@ -129,7 +129,7 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-12">
-                        Conferma inserendo il codice di modifica
+                        <p>Conferma inserendo il codice di modifica</p>                       
                     </div>
                 </div>
                 <div class="row">
@@ -175,6 +175,23 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" data-bind="click:$root.navToHome">Chiudi</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="outcomeModal" tabindex="-1" role="dialog" aria-labelledby="outcomeModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document" data-bind="with:Outcome">
+        <div class="modal-content">            
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <p class="outcome-message" data-bind="text:Message"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" data-bind="click:Action()">Chiudi</button>
             </div>
         </div>
     </div>
