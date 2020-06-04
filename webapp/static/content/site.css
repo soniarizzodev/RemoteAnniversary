@@ -122,9 +122,10 @@ header h4{
     padding:var(--general-padding);
 }
 
-.book-entry .message{
-    padding-bottom:var(--general-padding);
-}
+    .book-entry .message {
+        padding-bottom: var(--general-padding);
+        white-space: pre-wrap;
+    }
 
 .add-button{
     padding-top:var(--general-padding);
