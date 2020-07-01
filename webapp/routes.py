@@ -33,16 +33,12 @@ def login_page():
 @app.route('/')
 @app.route('/home')
 def home():
-    """Renders the home page."""
-
-    if current_user.is_authenticated:
-        return render_template(
-            'index.html',
-            title='Home Page',
-            year=datetime.now().year,
-        )
-    else:
-        return redirect(url_for('login_page'))
+    """Renders the landing page."""
+    return render_template(
+        'home.html',
+        title='Feelia - Together for your special moments',
+        year=datetime.now().year,
+    )
 
 @app.route('/contact')
 def contact():
