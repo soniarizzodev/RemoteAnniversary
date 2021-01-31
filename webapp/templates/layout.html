@@ -20,7 +20,7 @@
         <h1>Vincenzo &amp; Giovanna</h1>
         <h4>40 anni insieme</h4>
     </header>
-    <div class="container body-content">        
+    <div class="container body-content">
 
         {% block content %}{% endblock %}
 
@@ -28,10 +28,24 @@
     <footer>
         <p>&copy; {{ year }} - Made with love by <a href="https://www.soniarizzodev.com/" target="_blank" rel="noopener">SoniaRizzoDev</a></p>
     </footer>
+
+    {% block scripts %}
     <script src="/static/scripts/jquery-3.5.0.min.js"></script>
     <script src="/static/content/bootstrap/bootstrap.min.js"></script>
     <script src="/static/scripts/internal-navigation.js"></script>
-    {% block scripts %}{% endblock %}
+    <script type="text/javascript" src="/static/scripts/knockout-3.5.1.debug.js"></script>
+    <script type="text/javascript" src="/static/scripts/knockout-i18n.js"></script>
+    <script type="text/javascript" src="/static/scripts/viewmodels.js"></script>
+    <script type="text/javascript" src="/static/i18n/en.js"></script>
+    <script type="text/javascript" src="/static/i18n/it.js"></script>
+    <script type="text/javascript" src="/static/i18n/i18n.js"></script>
+
+
+    <script type="text/javascript">
+        window["app"] = new App();
+        ko.applyBindings(app, document.body);
+    </script>
+    {% endblock %}
 
 </body>
 </html>
